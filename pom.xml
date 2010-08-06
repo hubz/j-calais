@@ -6,7 +6,25 @@
   <packaging>jar</packaging>
   <version>0.2-SNAPSHOT</version>
   <name>j-calais</name>
-  <url>http://maven.apache.org</url>
+  <url>http://code.google.com/p/j-calais</url>
+  <issueManagement>
+    <system>code.google.com</system>
+    <url>http://code.google.com/p/j-calais/issues</url>
+  </issueManagement>
+  <inceptionYear>2010</inceptionYear>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <connection>http://j-calais.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://j-calais.googlecode.com/svn/trunk/</developerConnection>
+    <tag>HEAD</tag>
+    <url>http://code.google.com/p/j-calais/source/browse/</url>
+  </scm>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
