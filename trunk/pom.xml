@@ -4,7 +4,7 @@
   <groupId>net.elmergarduno.jcalais</groupId>
   <artifactId>j-calais</artifactId>
   <packaging>jar</packaging>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.2-SNAPSHOT</version>
   <name>j-calais</name>
   <url>http://maven.apache.org</url>
   <dependencies>

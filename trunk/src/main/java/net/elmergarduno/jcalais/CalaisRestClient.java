@@ -21,6 +21,7 @@ package net.elmergarduno.jcalais;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Formatter;
 import java.util.Iterator;
@@ -51,6 +52,9 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
+import net.elmergarduno.jcalais.CalaisConfig.ProcessingParam;
+import net.elmergarduno.jcalais.CalaisConfig.UserParam;
+
 public final class CalaisRestClient implements CalaisClient {
   
   private static final String SUBMITTER = "j-calais client v 0.1";
@@ -60,11 +64,7 @@ public final class CalaisRestClient implements CalaisClient {
   private static final String TYPE = "application/x-www-form-urlencoded";
 
   private static final int MAX_CONTENT_SIZE = 100000;
-  
-  private static final String PARAMS_HEADER = "<c:params xmlns:c=\"http://s.opencalais.com/1/pred/\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">";
-
-  private static final String PARAMS_FOOTER = "</c:params>";
-
+   
   private static final ImmutableMap<String, String> PROCESSING_DEFAULTS = 
        new ImmutableMap.Builder<String, String>()
     .put("contentType", "TEXT/RAW")
@@ -74,17 +74,14 @@ public final class CalaisRestClient implements CalaisClient {
   //.put("enableMetadataType", null)
     .put("docRDFaccessible", "true")
     .build();
-   
-  private final Map<String, String> userDirectives = Maps.newHashMap();
-
-  {
-    userDirectives.put("allowDistribution", "false"); 
-    userDirectives.put("allowSearch", "false"); 
-    userDirectives.put("externalID", UUID.randomUUID().toString());
-    userDirectives.put("submitter", SUBMITTER);
-  }
-  
-  private final Map<String, String> externalMetadata = Maps.newHashMap();
+    
+  private static final ImmutableMap<String, String> USER_DEFAULTS = 
+       new ImmutableMap.Builder<String, String>()
+    .put("allowDistribution", "false") 
+    .put("allowSearch", "false")
+    .put("externalID", UUID.randomUUID().toString())
+    .put("submitter", SUBMITTER)
+    .build();
 
   private final Client client;
 
@@ -97,15 +94,28 @@ public final class CalaisRestClient implements CalaisClient {
     this.client = Client.create(config);
   }
 
-  public CalaisResponse analyze(Reader reader) throws IOException {
-    return analyze(CharStreams.toString(reader));
+  public CalaisResponse analyze(URL url) throws IOException {
+    CalaisConfig config = new CalaisConfig();
+    config.set(UserParam.EXTERNAL_ID, url.toString());
+    config.set(ProcessingParam.CONTENT_TYPE, "TEXT/HTML");
+    return analyze(new InputStreamReader(url.openStream()), config);
   }
 
-  private static final class Prueba {
-  
+  public CalaisResponse analyze(Reader reader) throws IOException {
+    return analyze(reader, new CalaisConfig());
+  }
+
+  public CalaisResponse analyze(Reader reader, CalaisConfig config)
+    throws IOException {
+    return analyze(CharStreams.toString(reader), config);
   }
 
   public CalaisResponse analyze(String content) throws IOException {
+    return analyze(content, new CalaisConfig());
+  }
+    
+  public CalaisResponse analyze(String content, CalaisConfig config) 
+    throws IOException {
     if (Strings.isNullOrEmpty(content) || content.length() > MAX_CONTENT_SIZE) {
       throw new IllegalArgumentException("Invalid content, either empty or "
                                          + "exceeds maximum allowed size");
@@ -114,7 +124,7 @@ public final class CalaisRestClient implements CalaisClient {
     MultivaluedMap formData = new MultivaluedMapImpl();
     formData.add("licenseID", apiKey);
     formData.add("content", content);
-    formData.add("paramsXML", getParamsXml());
+    formData.add("paramsXML", config.getParamsXml());
     Map<String, Object> map = webResource.type(TYPE)
       .accept(MediaType.APPLICATION_JSON_TYPE)
       .post(Map.class, formData);
@@ -168,6 +178,10 @@ public final class CalaisRestClient implements CalaisClient {
       return (o instanceof Iterable) 
         ? Iterables.unmodifiableIterable((Iterable) o) : null;
     }
+
+    public String toString() {
+      return map.toString();
+    }
     
   }
 
@@ -192,32 +206,11 @@ public final class CalaisRestClient implements CalaisClient {
     Multimap<String, CalaisObject> result = ArrayListMultimap.create();
     for (Map.Entry<String, Object> me : root.entrySet()) {
       Map<String, Object> map = (Map<String, Object>) me.getValue();
+      map.put("_uri", me.getKey());
       String group = (String) map.get("_typeGroup");
       result.put(group, new MappedCalaisObject(map));
     }
     return result;
-  }
-
-  private String getParamsXml() {
-    Map<String, String> processingDirectives = 
-      Maps.newHashMap(PROCESSING_DEFAULTS);
-    StringBuilder sb = new StringBuilder(PARAMS_HEADER);
-    addDirectives("processingDirectives", processingDirectives, sb);
-    addDirectives("userDirectives", userDirectives, sb);
-    addDirectives("externalMetadata", externalMetadata, sb);
-    sb.append(PARAMS_FOOTER);
-    return sb.toString();
-  }
-
-  private void addDirectives(String name, Map<String, String> map, 
-                             StringBuilder sb) {
-    sb.append("<c:");
-    sb.append(name);
-    Formatter formatter = new Formatter(sb);
-    for (Map.Entry<String, String> me : map.entrySet()) {
-      formatter.format(" c:%s=\"%s\"", me.getKey(), me.getValue());
-    }
-    sb.append("/>");
   }
 
 }
