@@ -3,7 +3,7 @@
   <groupId>net.elmergarduno.jcalais</groupId>
   <artifactId>j-calais</artifactId>
   <packaging>jar</packaging>
-  <version>0.2</version>
+  <version>0.3-SNAPSHOT</version>
   <name>j-calais</name>
   <url>http://code.google.com/p/j-calais</url>
   <issueManagement>
@@ -19,10 +19,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>http://j-calais.googlecode.com/svn/tags/j-calais-0.2</connection>
-    <developerConnection>scm:svn:https://j-calais.googlecode.com/svn/tags/j-calais-0.2</developerConnection>
-    <tag>HEAD</tag>
-    <url>http://code.google.com/p/j-calais/source/browse/tags/j-calais-0.2</url>
+    <connection>http://j-calais.googlecode.com/svn/</connection>
+    <developerConnection>scm:svn:https://j-calais.googlecode.com/svn/</developerConnection>
+    <url>http://code.google.com/p/j-calais/source/browse/</url>
   </scm>
   <dependencies>
     <dependency>
