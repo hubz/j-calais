@@ -16,7 +16,7 @@
  *  Inspired by python-calais (http://code.google.com/p/python-calais/)
  */
 
-package net.elmergarduno.jcalais;
+package net.elmergarduno.jcalais.rest;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -52,36 +52,20 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
+import net.elmergarduno.jcalais.CalaisClient;
+import net.elmergarduno.jcalais.CalaisConfig;
 import net.elmergarduno.jcalais.CalaisConfig.ProcessingParam;
 import net.elmergarduno.jcalais.CalaisConfig.UserParam;
+import net.elmergarduno.jcalais.CalaisObject;
+import net.elmergarduno.jcalais.CalaisResponse;
 
 public final class CalaisRestClient implements CalaisClient {
-  
-  private static final String SUBMITTER = "j-calais client v 0.1";
 
   private static final String RESOURCE = "http://api.opencalais.com/enlighten/rest/";
   
   private static final String TYPE = "application/x-www-form-urlencoded";
 
   private static final int MAX_CONTENT_SIZE = 100000;
-   
-  private static final ImmutableMap<String, String> PROCESSING_DEFAULTS = 
-       new ImmutableMap.Builder<String, String>()
-    .put("contentType", "TEXT/RAW")
-    .put("outputFormat", "application/json")
-  //.put("reltagBaseURL", null)
-    .put("calculateRelevanceScore", "true")
-  //.put("enableMetadataType", null)
-    .put("docRDFaccessible", "true")
-    .build();
-    
-  private static final ImmutableMap<String, String> USER_DEFAULTS = 
-       new ImmutableMap.Builder<String, String>()
-    .put("allowDistribution", "false") 
-    .put("allowSearch", "false")
-    .put("externalID", UUID.randomUUID().toString())
-    .put("submitter", SUBMITTER)
-    .build();
 
   private final Client client;
 
