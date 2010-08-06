@@ -23,10 +23,19 @@ import java.net.URL;
 
 public interface CalaisClient {
   
+  CalaisResponse analyze(URL url) throws IOException;
+  
+  CalaisResponse analyze(URL url, CalaisConfig config)
+    throws IOException;
+
   CalaisResponse analyze(Reader reader) throws IOException;
+
+  CalaisResponse analyze(Reader reader, CalaisConfig config)
+    throws IOException;
 
   CalaisResponse analyze(String content) throws IOException;
 
-  CalaisResponse analyze(URL url) throws IOException;
+  CalaisResponse analyze(String content, CalaisConfig config) 
+    throws IOException;
 
 }
