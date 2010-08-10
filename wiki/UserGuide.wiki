@@ -1,15 +1,15 @@
 #labels Featured,Phase-Implementation
 # j-calais -- User Guide
 
-= Usage =
+== Usage ==
 
-==Setup the client==
+===Setup the client===
 
 {{{
     CalaisClient client = new CalaisRestClient("OpenCalais API key");
 }}}
 
-==Analyze texts==
+===Analyze texts===
 
 You can analyze a text fragment from a `String`:
 
@@ -29,17 +29,23 @@ Or from any `Readable`
     CalaisResponse response = client.analyze(new FileReader("sample.txt"));
 }}}
 
-==Configure options==
+===Configure options===
 
-You can also configure OpenCalais input parameters using `CalaisConfig` class
+You can configure OpenCalais [http://www.opencalais.com/documentation/calais-web-service-api/forming-api-calls/input-parameters input parameters] using `CalaisConfig` class
 
 {{{
     CalaisConfig config = new CalaisConfig();
-    config.set(CalaisConfig.UserParam.EXTERNAL_ID, url.toString());
-    config.set(CalaisConfig.ProcessingParam.CONTENT_TYPE, "TEXT/HTML")
+    config.set(CalaisConfig.UserParam.EXTERNAL_ID, "User generated ID");
+    config.set(CalaisConfig.ProcessingParam.CALCULATE_RELEVANCE_SCORE, "true");
 }}}
 
-==Work with the results==
+And call any of the `analyze` methods
+
+{{{
+    CalaisResponse response = client.analyze("Text to analyze", config);
+}}}
+
+===Work with the results===
 
 Display recognized entities:
 
