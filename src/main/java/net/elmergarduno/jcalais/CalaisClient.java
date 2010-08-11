@@ -18,7 +18,6 @@
 package net.elmergarduno.jcalais;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URL;
 
 public interface CalaisClient {
@@ -28,9 +27,9 @@ public interface CalaisClient {
   CalaisResponse analyze(URL url, CalaisConfig config)
     throws IOException;
 
-  CalaisResponse analyze(Reader reader) throws IOException;
+  CalaisResponse analyze(Readable readable) throws IOException;
 
-  CalaisResponse analyze(Reader reader, CalaisConfig config)
+  CalaisResponse analyze(Readable readable, CalaisConfig config)
     throws IOException;
 
   CalaisResponse analyze(String content) throws IOException;

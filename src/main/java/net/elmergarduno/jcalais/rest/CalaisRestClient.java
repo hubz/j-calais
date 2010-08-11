@@ -20,7 +20,6 @@ package net.elmergarduno.jcalais.rest;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Formatter;
@@ -90,13 +89,13 @@ public final class CalaisRestClient implements CalaisClient {
   }
 
 
-  public CalaisResponse analyze(Reader reader) throws IOException {
-    return analyze(reader, new CalaisConfig());
+  public CalaisResponse analyze(Readable readable) throws IOException {
+    return analyze(readable, new CalaisConfig());
   }
 
-  public CalaisResponse analyze(Reader reader, CalaisConfig config)
+  public CalaisResponse analyze(Readable readable, CalaisConfig config)
     throws IOException {
-    return analyze(CharStreams.toString(reader), config);
+    return analyze(CharStreams.toString(readable), config);
   }
 
   public CalaisResponse analyze(String content) throws IOException {
