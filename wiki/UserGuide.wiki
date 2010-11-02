@@ -69,8 +69,8 @@ Display topics:
 
 To run j-calais you can add each of the dependencies independently to the CLASSPATH.
 
-  * Run this command `mvn dependency:copy-dependencies`, to copy all the dependencies to the the project `target/dependency/` directory, and add them to the CLASSPATH.
+  * Run `mvn dependency:copy-dependencies`, to copy all the dependencies to the the `target/dependency/` directory, then add them to the CLASSPATH.
 
 Or you can create a jar that contains all the required dependencies and add only that jar to the CLASSPATH.
 
-  * Run this command `mvn assembly:assembly` and add the generated jar j-calais-XXXX-jar-with-dependencies.jar to the CLASSPATH.
+  * Run `mvn assembly:assembly` and add the generated jar j-calais-XXXX-jar-with-dependencies.jar to the CLASSPATH.
