@@ -60,7 +60,8 @@ import net.elmergarduno.jcalais.CalaisResponse;
 
 public final class CalaisRestClient implements CalaisClient {
 
-  private static final String RESOURCE = "http://api.opencalais.com/enlighten/rest/";
+  private static final String RESOURCE = 
+    "http://api.opencalais.com/enlighten/rest/";
   
   private static final String TYPE = "application/x-www-form-urlencoded";
 
@@ -87,7 +88,6 @@ public final class CalaisRestClient implements CalaisClient {
     config.set(ProcessingParam.CONTENT_TYPE, "TEXT/HTML");
     return analyze(new InputStreamReader(url.openStream()), config);
   }
-
 
   public CalaisResponse analyze(Readable readable) throws IOException {
     return analyze(readable, new CalaisConfig());
@@ -144,15 +144,15 @@ public final class CalaisRestClient implements CalaisClient {
   }
 
   private CalaisObject extractObject(Map<String, Object> map, String key) {
-    return new MappedCalaisObject((Map<String, Object>) map.remove(key));
+    return new MapBasedCalaisObject((Map<String, Object>) map.remove(key));
   }
   
-  private final static class MappedCalaisObject 
+  private final static class MapBasedCalaisObject 
     implements CalaisObject {
     
     private final Map<String, Object> map;
 
-    private MappedCalaisObject(Map<String, Object> map) {
+    private MapBasedCalaisObject(Map<String, Object> map) {
       this.map = ImmutableMap.copyOf(map);
     }
 
@@ -196,7 +196,7 @@ public final class CalaisRestClient implements CalaisClient {
       Map<String, Object> map = (Map<String, Object>) me.getValue();
       map.put("_uri", me.getKey());
       String group = (String) map.get("_typeGroup");
-      result.put(group, new MappedCalaisObject(map));
+      result.put(group, new MapBasedCalaisObject(map));
     }
     return result;
   }
