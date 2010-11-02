@@ -73,4 +73,4 @@ To run j-calais you can add each of the dependencies independently to the CLASSP
 
 Or you can create a jar that contains all the required dependencies and add only that jar to the CLASSPATH.
 
-  * Run `mvn assembly:assembly` and add the generated jar j-calais-XXXX-jar-with-dependencies.jar to the CLASSPATH.
+  * Run `mvn assembly:assembly`, and add the generated jar j-calais-XXXX-jar-with-dependencies.jar to the CLASSPATH.
