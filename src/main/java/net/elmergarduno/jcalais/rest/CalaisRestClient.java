@@ -129,7 +129,9 @@ public final class CalaisRestClient implements CalaisClient {
     final Iterable<CalaisObject> entities = Iterables
       .unmodifiableIterable(hierarchy.get("entities"));
     final Iterable<CalaisObject> relations = Iterables
-      .unmodifiableIterable(hierarchy.get("relations"));
+      .unmodifiableIterable(hierarchy.get("relations"));    
+    final Iterable<CalaisObject> socialTags = Iterables  
+      .unmodifiableIterable(hierarchy.get("socialTag"));
     return new CalaisResponse() {
       public CalaisObject getInfo() { return info; }
       
@@ -140,6 +142,8 @@ public final class CalaisRestClient implements CalaisClient {
       public Iterable<CalaisObject> getEntities() { return entities; }
       
       public Iterable<CalaisObject> getRelations() { return relations; }
+      
+      public Iterable<CalaisObject> getSocialTags() { return socialTags; }
     };
   }
 
