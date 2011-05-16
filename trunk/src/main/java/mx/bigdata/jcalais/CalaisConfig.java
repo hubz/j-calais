@@ -1,5 +1,5 @@
 /*
- *  Copyright 2010 Elmer Garduno
+ *  Copyright 2010 BigData Mx
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  *  Inspired by python-calais (http://code.google.com/p/python-calais/)
  */
 
-package net.elmergarduno.jcalais;
+package mx.bigdata.jcalais;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
