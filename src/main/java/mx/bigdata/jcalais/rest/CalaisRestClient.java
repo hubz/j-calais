@@ -1,5 +1,5 @@
 /*
- *  Copyright 2010 Elmer Garduno
+ *  Copyright 2010 BigData Mx
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  *  Inspired by python-calais (http://code.google.com/p/python-calais/)
  */
 
-package net.elmergarduno.jcalais.rest;
+package mx.bigdata.jcalais.rest;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -51,12 +51,12 @@ import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 
-import net.elmergarduno.jcalais.CalaisClient;
-import net.elmergarduno.jcalais.CalaisConfig;
-import net.elmergarduno.jcalais.CalaisConfig.ProcessingParam;
-import net.elmergarduno.jcalais.CalaisConfig.UserParam;
-import net.elmergarduno.jcalais.CalaisObject;
-import net.elmergarduno.jcalais.CalaisResponse;
+import mx.bigdata.jcalais.CalaisClient;
+import mx.bigdata.jcalais.CalaisConfig;
+import mx.bigdata.jcalais.CalaisConfig.ProcessingParam;
+import mx.bigdata.jcalais.CalaisConfig.UserParam;
+import mx.bigdata.jcalais.CalaisObject;
+import mx.bigdata.jcalais.CalaisResponse;
 
 public final class CalaisRestClient implements CalaisClient {
 
