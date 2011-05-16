@@ -26,8 +26,8 @@
     </license>
   </licenses>
   <scm>
-    <connection>http://j-calais.googlecode.com/svn/</connection>
-    <developerConnection>scm:svn:https://j-calais.googlecode.com/svn/</developerConnection>
+    <connection>http://j-calais.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://j-calais.googlecode.com/svn/trunk/</developerConnection>
     <url>http://code.google.com/p/j-calais/source/browse/</url>
   </scm>
 
