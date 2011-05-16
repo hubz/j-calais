@@ -65,12 +65,28 @@ Display topics:
     }
 }}}
 
+
+Display Social Tags: 
+
+{{{
+    for (CalaisObject tags : response.getSocialTags()){
+      System.out.println(tags.getField("_typeGroup") + ":" 
+                         + tags.getField("name"));
+    }
+}}}
+
 == Running == 
 
-To run j-calais you can add each of the dependencies independently to the CLASSPATH.
+To integrate j-calais in your source code use the following Maven artifact:
 
-  * Run `mvn dependency:copy-dependencies`, to copy all the dependencies to the the `target/dependency/` directory, then add them to the CLASSPATH.
+{{{
+    <dependency>
+      <groupId>mx.bigdata.jcalais</groupId>
+      <artifactId>j-calais</artifactId>
+      <version>0.2.1</version>
+    </dependency>
+}}}
 
-Or you can create a jar that contains all the required dependencies and add only that jar to the CLASSPATH.
+Or you can add each of the dependencies independently to the CLASSPATH.
 
-  * Run `mvn assembly:assembly`, and add the generated jar j-calais-XXXX-jar-with-dependencies.jar to the CLASSPATH.
+  * Run `mvn dependency:copy-dependencies`, to copy all the dependencies to the the `target/dependency/` directory, then add them to your CLASSPATH.
