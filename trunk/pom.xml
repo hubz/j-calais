@@ -3,7 +3,7 @@
   <groupId>mx.bigdata.jcalais</groupId>
   <artifactId>j-calais</artifactId>
   <packaging>jar</packaging>
-  <version>0.2.2-SNAPSHOT</version>
+  <version>0.2.1-SNAPSHOT</version>
   <name>j-calais</name>
   <url>http://code.google.com/p/j-calais</url>
   
