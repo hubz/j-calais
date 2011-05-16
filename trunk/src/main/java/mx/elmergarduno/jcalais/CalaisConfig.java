@@ -129,6 +129,8 @@ public final class CalaisConfig {
        new ImmutableMap.Builder<String, String>()
     .put("contentType", "TEXT/RAW")
     .put("outputFormat", "application/json")
+    .put("enableMetadataType","GenericRelations,SocialTags")
+    .put("calculateRelevanceScore","true")
     .build();
     
   private static final ImmutableMap<String, String> USER_DEFAULTS = 
