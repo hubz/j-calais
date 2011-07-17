@@ -37,10 +37,6 @@ import com.google.common.collect.Multimap;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.CharStreams;
 
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-
 /**
  * No thread-safe, use one instance per request.
  */
