@@ -20,23 +20,27 @@ package mx.bigdata.jcalais.rest;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.Formatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.MediaType;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
+import org.xml.sax.InputSource;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
@@ -47,14 +51,14 @@ import com.google.common.collect.Multimap;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.CharStreams;
 
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import mx.bigdata.jcalais.CalaisClient;
 import mx.bigdata.jcalais.CalaisConfig;
 import mx.bigdata.jcalais.CalaisConfig.ProcessingParam;
 import mx.bigdata.jcalais.CalaisConfig.UserParam;
+import mx.bigdata.jcalais.CalaisException;
 import mx.bigdata.jcalais.CalaisObject;
 import mx.bigdata.jcalais.CalaisResponse;
 
@@ -66,16 +70,13 @@ public final class CalaisRestClient implements CalaisClient {
   private static final String TYPE = "application/x-www-form-urlencoded";
 
   private static final int MAX_CONTENT_SIZE = 100000;
-
-  private final Client client;
-
+  
+  private final ObjectMapper mapper = new ObjectMapper();
+  
   private final String apiKey;
 
   public CalaisRestClient(String apiKey) {
     this.apiKey= apiKey;
-    ClientConfig config = new DefaultClientConfig();
-    config.getClasses().add(JacksonJsonProvider.class);
-    this.client = Client.create(config);
   }
 
   public CalaisResponse analyze(URL url) throws IOException {
@@ -108,15 +109,46 @@ public final class CalaisRestClient implements CalaisClient {
       throw new IllegalArgumentException("Invalid content, either empty or "
                                          + "exceeds maximum allowed size");
     }
-    WebResource webResource = client.resource(RESOURCE);
-    MultivaluedMap formData = new MultivaluedMapImpl();
-    formData.add("licenseID", apiKey);
-    formData.add("content", content);
-    formData.add("paramsXML", config.getParamsXml());
-    Map<String, Object> map = webResource.type(TYPE)
-      .accept(MediaType.APPLICATION_JSON_TYPE)
-      .post(Map.class, formData);
+    Map<String, String> formData = Maps.newHashMap();
+    formData.put("licenseID", apiKey);
+    formData.put("content", content);
+    formData.put("paramsXML", config.getParamsXml());
+    Map<String, Object> map = post(formData);
     return processResponse(map);
+  }
+  
+  private Map<String, Object> post(Map<String, String> formData) 
+    throws IOException {
+    StringBuilder data = new StringBuilder();
+    for (Map.Entry<String, String> me : formData.entrySet()) {
+      data.append(URLEncoder.encode(me.getKey(), "UTF-8"));
+      data.append("=");
+      data.append(URLEncoder.encode(me.getValue(), "UTF-8"));
+      data.append("&");
+    }
+    data.deleteCharAt(data.length() - 1);
+    URL url = new URL(RESOURCE);
+    URLConnection conn = url.openConnection();
+    conn.setDoOutput(true);
+    OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+    try {
+      out.write(data.toString());
+      out.flush();
+    } finally {
+      out.close();
+    }
+    Reader in = new InputStreamReader(conn.getInputStream());
+    String string;
+    try {
+      string = CharStreams.toString(in);
+    } finally {
+      in.close();
+    }
+    try {
+      return mapper.readValue(string, Map.class);
+    } catch (JsonParseException e) {
+      throw parseError(string);
+    }
   }
   
   private CalaisResponse processResponse(Map<String, Object> map) {
@@ -203,6 +235,31 @@ public final class CalaisRestClient implements CalaisClient {
       result.put(group, new MapBasedCalaisObject(map));
     }
     return result;
+  }
+
+  private CalaisException parseError(String error)  {
+    try {
+      DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+      DocumentBuilder builder = domFactory.newDocumentBuilder();
+      StringReader reader = new StringReader(error);
+      Document doc = builder.parse(new InputSource(reader));
+      XPathFactory factory = XPathFactory.newInstance();
+      XPath xpath = factory.newXPath();
+      String method = (String) xpath
+        .evaluate("/Error/@Method", doc, XPathConstants.STRING);
+      String calaisRequestID = (String) xpath
+        .evaluate("/Error/@calaisRequestID", doc, XPathConstants.STRING);
+      String creationDate = (String) xpath
+        .evaluate("/Error/@CreationDate", doc, XPathConstants.STRING);
+      String calaisVersion = (String) xpath
+        .evaluate("/Error/@CalaisVersion", doc, XPathConstants.STRING);
+      String exception = (String) xpath
+        .evaluate("/Error/Exception/text()", doc, XPathConstants.STRING);
+      return new CalaisException(method, calaisRequestID, creationDate, 
+                                 calaisVersion, exception);
+    } catch (Exception e) {
+      throw new RuntimeException("Unable to parse exception", e);
+    }
   }
 
 }
