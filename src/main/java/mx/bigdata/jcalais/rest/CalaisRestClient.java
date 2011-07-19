@@ -203,6 +203,10 @@ public final class CalaisRestClient implements CalaisClient {
         ? Iterables.unmodifiableIterable((Iterable) o) : null;
     }
 
+    public Iterable<String> getFieldNames() {
+      return Iterables.unmodifiableIterable(map.keySet());
+    }
+
     public String toString() {
       return map.toString();
     }

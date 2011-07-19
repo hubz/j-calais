@@ -29,4 +29,6 @@ public interface CalaisObject {
    */
   Iterable getList(String field);
 
+  Iterable<String> getFieldNames();
+
 }
