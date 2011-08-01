@@ -3,7 +3,7 @@
   <groupId>mx.bigdata.jcalais</groupId>
   <artifactId>j-calais</artifactId>
   <packaging>jar</packaging>
-  <version>0.3</version>
+  <version>0.4-SNAPSHOT</version>
   <name>j-calais</name>
   <url>http://code.google.com/p/j-calais</url>
   
@@ -26,9 +26,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>http://j-calais.googlecode.com/svn/tags/j-calais-0.3</connection>
-    <developerConnection>scm:svn:https://j-calais.googlecode.com/svn/tags/j-calais-0.3</developerConnection>
-    <url>http://code.google.com/p/j-calais/source/browse/tags/j-calais-0.3</url>
+    <connection>http://j-calais.googlecode.com/svn/trunk/</connection>
+    <developerConnection>scm:svn:https://j-calais.googlecode.com/svn/trunk/</developerConnection>
+    <url>http://code.google.com/p/j-calais/source/browse/</url>
   </scm>
 
   <dependencies>
