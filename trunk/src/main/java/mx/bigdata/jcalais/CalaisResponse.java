@@ -33,4 +33,6 @@ public interface CalaisResponse {
   
   Iterable<CalaisObject> getSocialTags();
   
+  String getPayload();
+  
 }

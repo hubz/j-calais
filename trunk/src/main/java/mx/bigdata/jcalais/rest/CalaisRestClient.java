@@ -113,11 +113,16 @@ public final class CalaisRestClient implements CalaisClient {
     formData.put("licenseID", apiKey);
     formData.put("content", content);
     formData.put("paramsXML", config.getParamsXml());
-    Map<String, Object> map = post(formData);
-    return processResponse(map);
+    String payload = post(formData);
+    try {
+      Map<String, Object> map = mapper.readValue(payload, Map.class);
+      return processResponse(map, payload);      
+    } catch (JsonParseException e) {
+      throw parseError(payload);
+    }
   }
   
-  private Map<String, Object> post(Map<String, String> formData) 
+  private String post(Map<String, String> formData) 
     throws IOException {
     StringBuilder data = new StringBuilder();
     for (Map.Entry<String, String> me : formData.entrySet()) {
@@ -138,20 +143,15 @@ public final class CalaisRestClient implements CalaisClient {
       out.close();
     }
     Reader in = new InputStreamReader(conn.getInputStream());
-    String string;
     try {
-      string = CharStreams.toString(in);
+      return CharStreams.toString(in);
     } finally {
       in.close();
     }
-    try {
-      return mapper.readValue(string, Map.class);
-    } catch (JsonParseException e) {
-      throw parseError(string);
-    }
   }
   
-  private CalaisResponse processResponse(Map<String, Object> map) {
+  public static CalaisResponse processResponse(Map<String, Object> map, 
+                                               final String payload) {
     Map<String, Object> doc = (Map<String, Object>) map.remove("doc");
     final CalaisObject info = extractObject(doc, "info");
     final CalaisObject meta = extractObject(doc, "meta");
@@ -176,10 +176,13 @@ public final class CalaisRestClient implements CalaisClient {
       public Iterable<CalaisObject> getRelations() { return relations; }
       
       public Iterable<CalaisObject> getSocialTags() { return socialTags; }
+
+      public String getPayload() { return payload; }
     };
   }
 
-  private CalaisObject extractObject(Map<String, Object> map, String key) {
+  private static CalaisObject extractObject(Map<String, Object> map,
+                                            String key) {
     return new MapBasedCalaisObject((Map<String, Object>) map.remove(key));
   }
   
@@ -229,7 +232,7 @@ public final class CalaisRestClient implements CalaisClient {
     }
   }
 
-  private Multimap<String, CalaisObject> createHierarchy(
+  private static Multimap<String, CalaisObject> createHierarchy(
                                                 Map<String, Object> root) {
     Multimap<String, CalaisObject> result = ArrayListMultimap.create();
     for (Map.Entry<String, Object> me : root.entrySet()) {
