@@ -17,10 +17,6 @@ The following third party software is distributed with j-calais
 software and is provided under other licenses and/or
 has source available from other locations.
 
-* jersey-client
-  License: CDDL 1.1 
-  Source code availability: http://jersey.java.net/
-
 * Jackson JAX-RS
   License: Apache License, Version 2.0
   Source code availability: http://jackson.codehaus.org/
