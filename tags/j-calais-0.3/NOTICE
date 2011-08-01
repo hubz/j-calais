@@ -1,0 +1,30 @@
+                     J-CALAIS LICENSE INFORMATION
+
+May 16, 2011
+
+j-calais software is licensed under the Apache License,
+Version 2.0. Other software included in this distribution is provided under 
+other licenses, as listed in the Included Software and Licenses section at 
+the bottom of this page. Source code for software included in this distribution
+is available from the j-calais project or as otherwise 
+indicated at the bottom of this page. 
+
+===
+
+LICENSE INFORMATION REGARDING BUNDLED THIRD-PARTY SOFTWARE
+
+The following third party software is distributed with j-calais
+software and is provided under other licenses and/or
+has source available from other locations.
+
+* jersey-client
+  License: CDDL 1.1 
+  Source code availability: http://jersey.java.net/
+
+* Jackson JAX-RS
+  License: Apache License, Version 2.0
+  Source code availability: http://jackson.codehaus.org/
+
+* Google guava-libraries
+  License: Apache License, Version 2.0 
+  Source code availability: http://code.google.com/p/guava-libraries/
