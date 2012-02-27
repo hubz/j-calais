@@ -75,6 +75,17 @@ Display Social Tags:
     }
 }}}
 
+===Connection options===
+Set connection options:
+
+
+{{{
+    CalaisConfig config = new CalaisConfig();
+    config.set(CalaisConfig.ConnParam.CONNECT_TIMEOUT, 1000);
+    config.set(CalaisConfig.ConnParam.READ_TIMEOUT, 1000);
+}}}
+
+
 == Running == 
 
 To integrate j-calais in your source code use the following Maven artifact:
@@ -83,7 +94,7 @@ To integrate j-calais in your source code use the following Maven artifact:
     <dependency>
       <groupId>mx.bigdata.jcalais</groupId>
       <artifactId>j-calais</artifactId>
-      <version>0.2.1</version>
+      <version>1.0</version>
     </dependency>
 }}}
 
