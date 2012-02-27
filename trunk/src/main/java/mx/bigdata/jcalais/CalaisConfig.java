@@ -48,6 +48,10 @@ public final class CalaisConfig {
 
   private static final String PARAMS_FOOTER = "</c:params>";
 
+  public enum ConnParam {
+    CONNECT_TIMEOUT, READ_TIMEOUT;
+  }
+
   public enum UserParam {
     /**
      * User-generated ID for the submission
@@ -121,6 +125,12 @@ public final class CalaisConfig {
     }
   }
 
+  private static final ImmutableMap<ConnParam, Integer> CONNECTION_DEFAULTS = 
+    new ImmutableMap.Builder<ConnParam, Integer>()
+    .put(ConnParam.CONNECT_TIMEOUT, 5000)
+    .put(ConnParam.READ_TIMEOUT, 5000)
+    .build();
+
   private static final ImmutableMap<String, String> PROCESSING_DEFAULTS = 
        new ImmutableMap.Builder<String, String>()
     .put("contentType", "TEXT/RAW")
@@ -141,6 +151,9 @@ public final class CalaisConfig {
   private final Map<String, String> userDirectives = 
     Maps.newHashMap(USER_DEFAULTS);
   
+  private final Map<ConnParam, Integer> connectionDirectives = 
+    Maps.newHashMap(CONNECTION_DEFAULTS);
+
   private final Map<String, String> externalMetadata = Maps.newHashMap();
 
 
@@ -159,6 +172,14 @@ public final class CalaisConfig {
       processingDirectives.put(key.getKey(), value);
     }
   }
+
+  public void set(ConnParam key, int value) {
+    connectionDirectives.put(key, value);
+  }
+
+  public int get(ConnParam key) {
+    return connectionDirectives.get(key);
+  } 
 
   public String getParamsXml() {
     StringBuilder sb = new StringBuilder(PARAMS_HEADER);

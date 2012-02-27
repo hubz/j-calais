@@ -56,6 +56,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import mx.bigdata.jcalais.CalaisClient;
 import mx.bigdata.jcalais.CalaisConfig;
+import mx.bigdata.jcalais.CalaisConfig.ConnParam;
 import mx.bigdata.jcalais.CalaisConfig.ProcessingParam;
 import mx.bigdata.jcalais.CalaisConfig.UserParam;
 import mx.bigdata.jcalais.CalaisException;
@@ -113,7 +114,7 @@ public final class CalaisRestClient implements CalaisClient {
     formData.put("licenseID", apiKey);
     formData.put("content", content);
     formData.put("paramsXML", config.getParamsXml());
-    String payload = post(formData);
+    String payload = post(formData, config);
     try {
       Map<String, Object> map = mapper.readValue(payload, Map.class);
       return processResponse(map, payload);      
@@ -122,7 +123,7 @@ public final class CalaisRestClient implements CalaisClient {
     }
   }
   
-  private String post(Map<String, String> formData) 
+  private String post(Map<String, String> formData, CalaisConfig config) 
     throws IOException {
     StringBuilder data = new StringBuilder();
     for (Map.Entry<String, String> me : formData.entrySet()) {
@@ -134,6 +135,8 @@ public final class CalaisRestClient implements CalaisClient {
     data.deleteCharAt(data.length() - 1);
     URL url = new URL(RESOURCE);
     URLConnection conn = url.openConnection();
+    conn.setConnectTimeout(config.get(ConnParam.CONNECT_TIMEOUT));
+    conn.setReadTimeout(config.get(ConnParam.CONNECT_TIMEOUT));
     conn.setDoOutput(true);
     OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
     try {
