@@ -136,7 +136,7 @@ public final class CalaisRestClient implements CalaisClient {
     URL url = new URL(RESOURCE);
     URLConnection conn = url.openConnection();
     conn.setConnectTimeout(config.get(ConnParam.CONNECT_TIMEOUT));
-    conn.setReadTimeout(config.get(ConnParam.CONNECT_TIMEOUT));
+    conn.setReadTimeout(config.get(ConnParam.READ_TIMEOUT));
     conn.setDoOutput(true);
     OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
     try {
